@@ -1,0 +1,42 @@
+-----------------------------------------------------------------------
+En esta simulacion todos los sospechosos entran despues del juez.
+-----------------------------------------------------------------------
+Se ha usado un tiempo muy pequeño para el juez 
+
+El sospechoso tenia un tiempo muy grande para asegurar que entraban despues del juez. 
+
+final int JUEZ_ESPERA_MAXIM = 200;
+final int JUEZ_ESPERA_MINIM = 100;
+
+final int TEMPS_ESPERA_MAXIM = 2000;
+final int TEMPS_ESPERA_MINIM = 1000;
+
+
+-----------------------------------------------------------------------
+                                RESULTADO
+-----------------------------------------------------------------------
+----> Jutge Dredd: Jo som la llei!
+----> Jutge Dredd: Som a la sala, tanqueu porta!
+----> Jutge Dredd: Si no hi ha ningú me'n vaig!
+----> Jutge Dredd: La justícia descansa, prendré declaració als sospitosos que queden
+Bane: No és just vull declarar! Som innocent!
+Mr. Freeze: No és just vull declarar! Som innocent!
+Jason Todd: No és just vull declarar! Som innocent!
+Talia al Ghul: No és just vull declarar! Som innocent!
+Mad Hatter: No és just vull declarar! Som innocent!
+Two-Face: No és just vull declarar! Som innocent!
+Catwoman: No és just vull declarar! Som innocent!
+Ra's al Ghul: No és just vull declarar! Som innocent!
+Riddler: No és just vull declarar! Som innocent!
+Poison Ivy: No és just vull declarar! Som innocent!
+Joker: No és just vull declarar! Som innocent!
+Scarecrow: No és just vull declarar! Som innocent!
+Penguin: No és just vull declarar! Som innocent!
+Harley Quinn: No és just vull declarar! Som innocent!
+Killer Croc: No és just vull declarar! Som innocent!
+Hush: No és just vull declarar! Som innocent!
+Hugo Strange: No és just vull declarar! Som innocent!
+Deathstroke: No és just vull declarar! Som innocent!
+Clayface: No és just vull declarar! Som innocent!
+Deadshot: No és just vull declarar! Som innocent!
+-----------------------------------------------------------------------

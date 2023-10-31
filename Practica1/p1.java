@@ -30,11 +30,11 @@ public class p1 {
     static boolean acabat = false;
     static boolean nadie = true;
 
-    final int TEMPS_ESPERA_MAXIM = 200;
-    final int TEMPS_ESPERA_MINIM = 100;
+    final int TEMPS_ESPERA_MAXIM = 2000;
+    final int TEMPS_ESPERA_MINIM = 1000;
 
-    final int JUEZ_ESPERA_MAXIM = 20000;
-    final int JUEZ_ESPERA_MINIM = 15000;
+    final int JUEZ_ESPERA_MAXIM = 200;
+    final int JUEZ_ESPERA_MINIM = 100;
 
     static Random ran = new Random();
 
