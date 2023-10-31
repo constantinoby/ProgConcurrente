@@ -30,11 +30,11 @@ public class p1 {
     static boolean acabat = false;
     static boolean nadie = true;
 
-    final int TEMPS_ESPERA_MAXIM = 2000;
-    final int TEMPS_ESPERA_MINIM = 1000;
+    final int TEMPS_ESPERA_MAXIM = 400;
+    final int TEMPS_ESPERA_MINIM = 300;
 
-    final int JUEZ_ESPERA_MAXIM = 200;
-    final int JUEZ_ESPERA_MINIM = 100;
+    final int JUEZ_ESPERA_MAXIM = 2100;
+    final int JUEZ_ESPERA_MINIM = 1000;
 
     static Random ran = new Random();
 
@@ -57,7 +57,7 @@ public class p1 {
                     System.out.println("----> Jutge Dredd: La justícia descansa, prendré declaració als" +
                             " sospitosos que queden");
                     while (nadie) {
-                        sleep(0, 5);
+                        sleep(0,5);
                     }
                     acabat = true;
                     esperarSospitosos.release(nSospechoso);
@@ -165,7 +165,7 @@ public class p1 {
 
                 llibertat.acquire();
                 acabat = true;
-                sleep(1);
+                sleep(2);
 
                 System.out.println(nom + " entra a l'Asil d'Arkham");
 

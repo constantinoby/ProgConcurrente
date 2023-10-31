@@ -1,0 +1,125 @@
+-----------------------------------------------------------------------
+En esta simulacion todos los sospechosos entran antes que el juez.
+-----------------------------------------------------------------------
+Se ha usado un tiempo muy pequeño para los sospechosos 
+
+El juez tenia un tiempo muy grande para asegurar que entraba el último de todos. 
+
+final int TEMPS_ESPERA_MAXIM = 200;
+final int TEMPS_ESPERA_MINIM = 100;
+
+final int JUEZ_ESPERA_MAXIM = 20000;
+final int JUEZ_ESPERA_MINIM = 15000;
+
+
+-----------------------------------------------------------------------
+                                RESULTADO
+-----------------------------------------------------------------------
+Bane: Som innocent!
+Ra's al Ghul: Som innocent!
+Bane entra al jutjat. Sospitosos: 1
+Ra's al Ghul entra al jutjat. Sospitosos: 2
+Riddler: Som innocent!
+Riddler entra al jutjat. Sospitosos: 3
+Joker: Som innocent!
+Joker entra al jutjat. Sospitosos: 4
+Two-Face: Som innocent!
+Two-Face entra al jutjat. Sospitosos: 5
+Scarecrow: Som innocent!
+Scarecrow entra al jutjat. Sospitosos: 6
+Catwoman: Som innocent!
+Catwoman entra al jutjat. Sospitosos: 7
+Poison Ivy: Som innocent!
+Poison Ivy entra al jutjat. Sospitosos: 8
+Penguin: Som innocent!
+Penguin entra al jutjat. Sospitosos: 9
+Mr. Freeze: Som innocent!
+Mr. Freeze entra al jutjat. Sospitosos: 10
+Harley Quinn: Som innocent!
+Harley Quinn entra al jutjat. Sospitosos: 11
+Killer Croc: Som innocent!
+Killer Croc entra al jutjat. Sospitosos: 12
+Jason Todd: Som innocent!
+Jason Todd entra al jutjat. Sospitosos: 13
+Hush: Som innocent!
+Hush entra al jutjat. Sospitosos: 14
+Hugo Strange: Som innocent!
+Hugo Strange entra al jutjat. Sospitosos: 15
+Talia al Ghul: Som innocent!
+Talia al Ghul entra al jutjat. Sospitosos: 16
+Deathstroke: Som innocent!
+Deathstroke entra al jutjat. Sospitosos: 17
+Clayface: Som innocent!
+Clayface entra al jutjat. Sospitosos: 18
+Deadshot: Som innocent!
+Deadshot entra al jutjat. Sospitosos: 19
+Mad Hatter: Som innocent!
+Mad Hatter entra al jutjat. Sospitosos: 20
+----> Jutge Dredd: Jo som la llei!
+----> Jutge Dredd: Som a la sala, tanqueu porta!
+----> Jutge Dredd: Fitxeu als sospitosos presents
+Bane fitxa. Fitxats: 1
+Ra's al Ghul fitxa. Fitxats: 2
+Riddler fitxa. Fitxats: 3
+Joker fitxa. Fitxats: 4
+Two-Face fitxa. Fitxats: 5
+Scarecrow fitxa. Fitxats: 6
+Catwoman fitxa. Fitxats: 7
+Poison Ivy fitxa. Fitxats: 8
+Penguin fitxa. Fitxats: 9
+Mr. Freeze fitxa. Fitxats: 10
+Harley Quinn fitxa. Fitxats: 11
+Killer Croc fitxa. Fitxats: 12
+Jason Todd fitxa. Fitxats: 13
+Hush fitxa. Fitxats: 14
+Hugo Strange fitxa. Fitxats: 15
+Talia al Ghul fitxa. Fitxats: 16
+Deathstroke fitxa. Fitxats: 17
+Clayface fitxa. Fitxats: 18
+Deadshot fitxa. Fitxats: 19
+Mad Hatter fitxa. Fitxats: 20
+----> Jutge Dredd: Preniu declaració als presents
+Bane declara. Declaracions: 1
+Mr. Freeze declara. Declaracions: 2
+Hush declara. Declaracions: 3
+Deathstroke declara. Declaracions: 4
+Mad Hatter declara. Declaracions: 5
+Ra's al Ghul declara. Declaracions: 6
+Riddler declara. Declaracions: 7
+Joker declara. Declaracions: 8
+Two-Face declara. Declaracions: 9
+Scarecrow declara. Declaracions: 10
+Catwoman declara. Declaracions: 11
+Poison Ivy declara. Declaracions: 12
+Penguin declara. Declaracions: 13
+Harley Quinn declara. Declaracions: 14
+Killer Croc declara. Declaracions: 15
+Jason Todd declara. Declaracions: 16
+Hugo Strange declara. Declaracions: 17
+Talia al Ghul declara. Declaracions: 18
+Clayface declara. Declaracions: 19
+Deadshot declara. Declaracions: 20
+----> Judge Dredd: Podeu abandonar la sala tots a l'asil!
+----> Jutge Dredd: La justícia descansa, prendré declaració als sospitosos que queden
+Bane entra a l'Asil d'Arkham
+Mr. Freeze entra a l'Asil d'Arkham
+Mad Hatter entra a l'Asil d'Arkham
+Poison Ivy entra a l'Asil d'Arkham
+Harley Quinn entra a l'Asil d'Arkham
+Jason Todd entra a l'Asil d'Arkham
+Hush entra a l'Asil d'Arkham
+Ra's al Ghul entra a l'Asil d'Arkham
+Deathstroke entra a l'Asil d'Arkham
+Riddler entra a l'Asil d'Arkham
+Joker entra a l'Asil d'Arkham
+Two-Face entra a l'Asil d'Arkham
+Scarecrow entra a l'Asil d'Arkham
+Catwoman entra a l'Asil d'Arkham
+Penguin entra a l'Asil d'Arkham
+Killer Croc entra a l'Asil d'Arkham
+Hugo Strange entra a l'Asil d'Arkham
+Talia al Ghul entra a l'Asil d'Arkham
+Deadshot entra a l'Asil d'Arkham
+Clayface entra a l'Asil d'Arkham
+
+-----------------------------------------------------------------------
