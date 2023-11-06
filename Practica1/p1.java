@@ -12,16 +12,20 @@ import java.util.logging.Logger;
 
 public class p1 {
 
+    // Numero de sospechosos que hay
     static int nSospechoso = 20;
 
+    // Semaforo usado para entrar a la sala, fichar y declarar.
     static Semaphore sala = new Semaphore(1);
+    // Semaforo del juez que indica si esta o no en la sala.
     static Semaphore jutge = new Semaphore(0);
+    // Semaforo usado para bloquear a los sospechosos de entrar a la sala.
     static Semaphore esperarSospitosos = new Semaphore(0);
-    static Semaphore fixarSemaphore = new Semaphore(1);
+    // Semaforo usado para que los sospechosos esperen para declarar y para ser
+    // aliberados.
     static Semaphore declaracio = new Semaphore(0);
-    static Semaphore llibertat = new Semaphore(0);
-    static Semaphore esperarDeclara = new Semaphore(1);
 
+    // Variables de control
     static int sospitososDinsSala = 1;
     static int sospitososFichats = 1;
     static int sospitososDeclarados = 1;
@@ -30,6 +34,7 @@ public class p1 {
     static boolean acabat = false;
     static boolean nadie = true;
 
+    // Tiempos de espera
     final int TEMPS_ESPERA_MAXIM = 400;
     final int TEMPS_ESPERA_MINIM = 300;
 
@@ -49,49 +54,58 @@ public class p1 {
 
                 System.out.println("----> Jutge Dredd: Som a la sala, tanqueu porta!");
 
+                // Una vez que el juez esta en la sala bloqueamos el semaforo
                 jutge.release();
 
+                // En el caso de que no haya gente cuando entre el juez se va
                 if (sospitososDinsSala == 1) {
 
                     System.out.println("----> Jutge Dredd: Si no hi ha ningú me'n vaig!");
                     System.out.println("----> Jutge Dredd: La justícia descansa, prendré declaració als" +
                             " sospitosos que queden");
+                    // Hacemos espera activa hasta que todos los sospechoso no se hayan inicializado
                     while (nadie) {
-                        sleep(0,5);
+                        sleep(0, 5);
                     }
+                    // Cambiamos el valor de acabat para que los sospechosos sepan que el juez esta
+                    // dentro de la sala.
                     acabat = true;
+                    // Hacemos release para que los sospechosos puedan seguir con su ejecucion
                     esperarSospitosos.release(nSospechoso);
                     return;
                 }
 
-                // System.out.println("Jutge Espera release:" + jutge.availablePermits());
-                esperarSospitosos.release(sospitososDinsSala - 1);// el juez esta en la sala empezamos a fichar
-                                                                  // desbloqueamos a los que han entrado a la sala
+                // el juez esta en la sala empezamos a fichar desbloqueamos a los que han
+                // entrado a la sala
+                esperarSospitosos.release(sospitososDinsSala - 1);
+
                 System.out.println("----> Jutge Dredd: Fitxeu als sospitosos presents");
-                // Una vez que han fichado todos, hacemos que declaren semaforo release
+                // Hacemos espera activa hasta que todos los sospechosos no hayan fichado
                 while (fichado) {
                     // espera activa
-                    // System.out.println("JUEZ FICHADO" + fichado);
-                    Thread.sleep(ran.nextInt(10000, 11000));
-
+                    Thread.sleep(ran.nextInt(1000, 1100));
                 }
+
                 System.out.println("----> Jutge Dredd: Preniu declaració als presents");
-                // System.out.println("JUEZ CAMBIA ");// NO AVANZA DE AQUI
                 fichado = true;
 
+                // Desbloqueamos a los sospechosos para que declaren
                 declaracio.release(sospitososDinsSala - 1);
 
                 while (fichado) {// hasta que no hayan declarado todos espero
                     // espera activa
-                    // System.out.println("JUEZ DECLARADO" + fichado);
-                    Thread.sleep(ran.nextInt(10000, 11000));
+                    Thread.sleep(ran.nextInt(1000, 1100));
                 }
-                // una vez el veredicto mandamos a todos al asilo
+                // una vez que han declarado todos los sospechosos los mando al asilo
                 System.out.println("----> Judge Dredd: Podeu abandonar la sala tots a l'asil!");
 
                 System.out.println("----> Jutge Dredd: La justícia descansa, prendré declaració als" +
                         " sospitosos que queden");
-                llibertat.release(sospitososDinsSala - 1);
+
+                // Desbloqueamos todos los hilos que hayan declarado para mandarlos al asilo
+                declaracio.release(sospitososDinsSala - 1);
+                sleep(5);
+                // Desbloqueamos a los sospechosos que no han entrado a la sala
                 esperarSospitosos.release(nSospechoso);
 
             } catch (InterruptedException ex) {
@@ -118,7 +132,9 @@ public class p1 {
         public void run() {
             try {
 
+                // Cada sospechoso entra a la sala de manera ordenada
                 sala.acquire();
+                // Si el juez esta dentro de la sala no printeamos el mensaje
                 if (jutge.availablePermits() == 0) {
                     System.out.println(nom + ": Som innocent!");
                 }
@@ -126,27 +142,33 @@ public class p1 {
                 sospitososEsperando++;
                 sala.release();
 
+                // Si el juez no esta dentro de la sala dejamos entrar al hilo en la sala,
+                // aumentando el numero de sospechosos dentro de ella.
                 if (jutge.availablePermits() == 0) {
                     System.out.println(nom + " entra al jutjat. Sospitosos: " + sospitososDinsSala);
                     sospitososDinsSala++;
 
                 }
+                // El ultimo sospechoso que entra indica que es el ultimo al juez mediante la
+                // variable del semaforo
                 if (sospitososEsperando == nSospechoso + 1) {
                     nadie = false;
                 }
 
                 esperarSospitosos.acquire();// bloqueamos hasta que el juez no diga de fichar
 
+                // Si el juez o el ultimo suspechoso en declarar dicen que han acabado los
+                // sospechosos que no han podido declarar se van a quejar
                 if (acabat) {
                     System.out.println(nom + ": No és just vull declarar! Som innocent!");
                     return;
                 }
 
-                fixarSemaphore.acquire();// bloqueo para fichar
+                sala.acquire();// bloqueo para fichar
                 System.out.println(nom + " fitxa. Fitxats: " + sospitososFichats);
                 Thread.sleep(ran.nextInt(TEMPS_ESPERA_MINIM, TEMPS_ESPERA_MAXIM)); // espera para fichar
                 sospitososFichats++;
-                fixarSemaphore.release();// release
+                sala.release();// release del fichado
 
                 if (sospitososDinsSala == sospitososFichats) {
                     fichado = false;
@@ -154,18 +176,22 @@ public class p1 {
 
                 declaracio.acquire();// esperamos para declarar
 
-                esperarDeclara.acquire();
+                sala.acquire(); // bloqueamos para declarar
                 System.out.println(nom + " declara. Declaracions: " + sospitososDeclarados);
+                Thread.sleep(ran.nextInt(TEMPS_ESPERA_MINIM, TEMPS_ESPERA_MAXIM)); // espera para declarar
                 sospitososDeclarados++;
-                esperarDeclara.release();
+                sala.release(); // release del declarado
 
+                // Una vez que el ultimo en declarar haya acabado se lo notificamos al juez
+                // mediante la variable boleana.
                 if (sospitososDinsSala == sospitososDeclarados) {
                     fichado = false;
                 }
 
-                llibertat.acquire();
+                // El juez manda al asilo a todos los que han entrado a la sala
+                declaracio.acquire();
                 acabat = true;
-                sleep(2);
+                sleep(15);
 
                 System.out.println(nom + " entra a l'Asil d'Arkham");
 
@@ -178,18 +204,23 @@ public class p1 {
 
     private void metodePrincipal() throws InterruptedException {
 
+        // Declaramos los hilos
         Thread sospechosos[] = new Thread[nSospechoso];
         Thread juez = new Thread(new p1.Juez());
 
+        // Declaramos los hilos de los sospechosos
         for (int i = 0; i < nSospechoso; i++) {
             sospechosos[i] = new Thread(new p1.Sospechoso(i));
         }
 
+        // Iniciamos el hilo del juez
         juez.start();
+        // Iniciamos los hilos de los sospechosos
         for (int i = 0; i < nSospechoso; i++) {
             sospechosos[i].start();
         }
 
+        // Esperamos a que acaben los hilos
         juez.join();
         for (int i = 0; i < nSospechoso; i++) {
             sospechosos[i].join();
@@ -200,6 +231,3 @@ public class p1 {
         new p1().metodePrincipal();
     }
 }
-
-// release suelte semaforo libero 0-->1
-// aquire lo coge si esta libre bloqueo 1-->0
