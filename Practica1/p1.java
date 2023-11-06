@@ -1,5 +1,3 @@
-package jutjatgotham;
-
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
@@ -25,21 +23,25 @@ public class p1 {
     // aliberados.
     static Semaphore declaracio = new Semaphore(0);
 
+    //semaforo para bloquear al juez
+    static Semaphore bloqueoJuez = new Semaphore(0);
+
+    //semaforo para bloquear al juez en caso de que no haya nadie
+    static Semaphore bloqNadie = new Semaphore(0);
+
     // Variables de control
     static int sospitososDinsSala = 1;
     static int sospitososFichats = 1;
     static int sospitososDeclarados = 1;
     static int sospitososEsperando = 1;
-    static boolean fichado = true;
     static boolean acabat = false;
-    static boolean nadie = true;
 
     // Tiempos de espera
-    final int TEMPS_ESPERA_MAXIM = 400;
-    final int TEMPS_ESPERA_MINIM = 300;
+    final int TEMPS_ESPERA_MAXIM = 100;
+    final int TEMPS_ESPERA_MINIM = 50;
 
-    final int JUEZ_ESPERA_MAXIM = 2100;
-    final int JUEZ_ESPERA_MINIM = 1000;
+    final int JUEZ_ESPERA_MAXIM = 200;
+    final int JUEZ_ESPERA_MINIM = 150;
 
     static Random ran = new Random();
 
@@ -63,10 +65,8 @@ public class p1 {
                     System.out.println("----> Jutge Dredd: Si no hi ha ningú me'n vaig!");
                     System.out.println("----> Jutge Dredd: La justícia descansa, prendré declaració als" +
                             " sospitosos que queden");
-                    // Hacemos espera activa hasta que todos los sospechoso no se hayan inicializado
-                    while (nadie) {
-                        sleep(0, 5);
-                    }
+                    // Bloqueamos hasta que todos los sospechoso no se hayan inicializado
+                    bloqNadie.acquire();
                     // Cambiamos el valor de acabat para que los sospechosos sepan que el juez esta
                     // dentro de la sala.
                     acabat = true;
@@ -80,22 +80,15 @@ public class p1 {
                 esperarSospitosos.release(sospitososDinsSala - 1);
 
                 System.out.println("----> Jutge Dredd: Fitxeu als sospitosos presents");
-                // Hacemos espera activa hasta que todos los sospechosos no hayan fichado
-                while (fichado) {
-                    // espera activa
-                    Thread.sleep(ran.nextInt(1000, 1100));
-                }
+                // Bloqueamos hasta que todos los sospechosos no hayan fichado
+                bloqueoJuez.acquire();
 
                 System.out.println("----> Jutge Dredd: Preniu declaració als presents");
-                fichado = true;
 
                 // Desbloqueamos a los sospechosos para que declaren
                 declaracio.release(sospitososDinsSala - 1);
 
-                while (fichado) {// hasta que no hayan declarado todos espero
-                    // espera activa
-                    Thread.sleep(ran.nextInt(1000, 1100));
-                }
+                bloqueoJuez.acquire();
                 // una vez que han declarado todos los sospechosos los mando al asilo
                 System.out.println("----> Judge Dredd: Podeu abandonar la sala tots a l'asil!");
 
@@ -152,7 +145,7 @@ public class p1 {
                 // El ultimo sospechoso que entra indica que es el ultimo al juez mediante la
                 // variable del semaforo
                 if (sospitososEsperando == nSospechoso + 1) {
-                    nadie = false;
+                    bloqNadie.release();
                 }
 
                 esperarSospitosos.acquire();// bloqueamos hasta que el juez no diga de fichar
@@ -171,7 +164,7 @@ public class p1 {
                 sala.release();// release del fichado
 
                 if (sospitososDinsSala == sospitososFichats) {
-                    fichado = false;
+                    bloqueoJuez.release();
                 }
 
                 declaracio.acquire();// esperamos para declarar
@@ -185,7 +178,7 @@ public class p1 {
                 // Una vez que el ultimo en declarar haya acabado se lo notificamos al juez
                 // mediante la variable boleana.
                 if (sospitososDinsSala == sospitososDeclarados) {
-                    fichado = false;
+                    bloqueoJuez.release();
                 }
 
                 // El juez manda al asilo a todos los que han entrado a la sala
