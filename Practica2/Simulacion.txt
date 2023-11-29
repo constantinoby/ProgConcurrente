@@ -1,0 +1,29 @@
+Ejemplo de una ejecución del programa
+-----------------------------------------------------------
+
+El cotxe  3 està en ruta en direcció 'S'
+El cotxe  1 està en ruta en direcció 'S'
+El cotxe  2 està en ruta en direcció 'N'
+El cotxe  5 està en ruta en direcció 'S'
+El cotxe  1 espera a l'entrada SUD, esperen al SUD:  1
+El cotxe  1 entra al pont. Esperen al SUD  0
+El cotxe  4 està en ruta en direcció 'N'
+L'ambulància  112 està en ruta
+El cotxe  4 espera a l'entrada NORD, esperen al NORD:  1
+El cotxe  3 espera a l'entrada SUD, esperen al SUD:  1
+El cotxe  2 espera a l'entrada NORD, esperen al NORD:  2
++++++Ambulància  112 espera per entrar
+------> El vehicle  1 surt del pont
++++++Ambulància  112 és al pont
+El cotxe  5 espera a l'entrada SUD, esperen al SUD:  2
+------> El vehicle  112 surt del pont
+El cotxe  4 entra al pont. Esperen al NORD  1
+------> El vehicle  4 surt del pont
+El cotxe  3 entra al pont. Esperen al SUD  1
+------> El vehicle  3 surt del pont
+El cotxe  2 entra al pont. Esperen al NORD  0
+------> El vehicle  2 surt del pont
+El cotxe  5 entra al pont. Esperen al SUD  0
+------> El vehicle  5 surt del pont
+
+------------------------------------------------------
