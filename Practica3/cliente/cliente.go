@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
-	"time"
 	"os"
 	"strconv"
+	"time"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -21,8 +21,8 @@ func failOnError(err error, msg string) {
 func main() {
 
 	if len(os.Args) < 2 {
-        log.Fatal("Usage: go run cliente.go \"<nombre>\"")
-    }
+		log.Fatal("Usage: go run cliente.go \"<nombre>\"")
+	}
 
 	nombreCliente := os.Args[1]
 
@@ -42,16 +42,7 @@ func main() {
 		false,        // no-wait
 		nil,          // arguments
 	)
-	
-	msgs, err := ch.Consume(
-		q.Name, // queue
-		"",     // consumer	
-		true,   // auto-ack
-		false,  // exclusive
-		false,  // no-local
-		false,  // no-wait
-		nil,    // args
-	)
+
 	failOnError(err, "Failed to declare a queue")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -60,18 +51,14 @@ func main() {
 
 	random := rand.New(rand.NewSource(time.Now().Unix()))
 	numOperations := random.Intn(10) + 1 // Genera un número aleatorio de operaciones entre 1 y 10
-	
+
 	// Balance inicializado en cero Prueba
-	var mensaje int
-	log.Printf("valor msgs: %d", msgs)
-		for d := range msgs {		
-			mensaje, err = strconv.Atoi(string(d.Body))
-			failOnError(err, "Failed to convert body to integer")
-		}
-	if(msgs == nil){
-		mensaje = 0
+	balanceBytes, err := os.ReadFile("../balance.txt")
+	balanceStr := string(balanceBytes)
+	balance, err := strconv.Atoi(balanceStr)
+	if err != nil {
+		balance = 0
 	}
-	balance := mensaje
 
 	log.Printf("%s vol fer %d operacions", nombreCliente, numOperations)
 
@@ -110,13 +97,13 @@ func main() {
 			log.Printf("NO HI HA SALDO")
 		} else if posible == 1 && operation == "reintegro" { //caso de reintegro con saldo
 			log.Printf("ES FARÀ EL REINTEGRO SI ÉS POSSIBLE")
-		}else if posible == 1 && operation == "ingreso" { //caso de ingreso
+		} else if posible == 1 && operation == "ingreso" { //caso de ingreso
 			log.Printf("INGRÉS CORRECTE")
 		}
 
 		log.Printf("Balanç actual: %d", balance)
 
-		log.Printf("%d----------------------------------------",i+1)
+		log.Printf("%d----------------------------------------", i+1)
 
 		body := fmt.Sprintf("%s %t %d", nombreCliente, isDeposit, amount)
 		err = ch.PublishWithContext(ctx,
