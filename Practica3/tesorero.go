@@ -58,13 +58,14 @@ func main() {
 		false,  // no-wait
 		nil,    // args
 	)
+
 	failOnError(err, "Failed to register a consumer")
 	//random := rand.New(rand.NewSource(time.Now().Unix()))
 	//botiMinim := random.Intn(10) + 1                             // Genera un número aleatorio de operaciones entre 1 y 10
 	log.Println("El tresorer és al despatx. El botí mínim és: ") //+ fmt.Sprint(botiMinim) + "€")
 	currentTime := time.Now()
 	formattedDataTime := currentTime.Format("2006-01-02 15:04:05")
-
+	
 	fmt.Println(formattedDataTime + "   [*] Esperant clients")
 	// Procesar operaciones de la cola
 	go func() {
@@ -92,18 +93,30 @@ func main() {
 					tresorer.Balance -= amount
 					log.Println("Balanç: ", tresorer.Balance)
 					log.Println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-				} else {
-					log.Printf("OPERACIÓ NO PERMESA, NO HI FONS")
-					log.Println("Balanç: ", tresorer.Balance)
-					log.Println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-				}
-			}
-
-			// Simular procesamiento de la operación
+					} else {
+						log.Printf("OPERACIÓ NO PERMESA, NO HI FONS")
+						log.Println("Balanç: ", tresorer.Balance)
+						log.Println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+						}				
+					}
+					// Publicar el balance actual
+					mensaje := fmt.Sprintf("%d",tresorer.Balance)
+					err = ch.Publish(
+						"",        // exchange
+						q.Name,		// routing key
+						false,     // mandatory
+						false,     // immediate	
+						amqp.Publishing{
+							ContentType: "text/plain",
+							Body:        []byte(mensaje),			
+						})				
+					// Simular procesamiento de la operación
 			time.Sleep(1 * time.Second)
 
 			d.Ack(false)
 		}
+		log.Println("El tesorero cierra. Balance alcanzado:", tresorer.Balance)
+		
 	}()
 
 	// Esperar a que haya al menos un cliente

@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"time"
 	"os"
+	"strconv"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -41,6 +42,16 @@ func main() {
 		false,        // no-wait
 		nil,          // arguments
 	)
+	
+	msgs, err := ch.Consume(
+		q.Name, // queue
+		"",     // consumer	
+		true,   // auto-ack
+		false,  // exclusive
+		false,  // no-local
+		false,  // no-wait
+		nil,    // args
+	)
 	failOnError(err, "Failed to declare a queue")
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
@@ -49,9 +60,18 @@ func main() {
 
 	random := rand.New(rand.NewSource(time.Now().Unix()))
 	numOperations := random.Intn(10) + 1 // Genera un número aleatorio de operaciones entre 1 y 10
-
+	
 	// Balance inicializado en cero Prueba
-	balance := 0
+	var mensaje int
+	log.Printf("valor msgs: %d", msgs)
+		for d := range msgs {		
+			mensaje, err = strconv.Atoi(string(d.Body))
+			failOnError(err, "Failed to convert body to integer")
+		}
+	if(msgs == nil){
+		mensaje = 0
+	}
+	balance := mensaje
 
 	log.Printf("%s vol fer %d operacions", nombreCliente, numOperations)
 
