@@ -6,6 +6,7 @@ import (
 	"log"
 	"math/rand"
 	"time"
+	"os"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -17,6 +18,13 @@ func failOnError(err error, msg string) {
 }
 
 func main() {
+
+	if len(os.Args) < 2 {
+        log.Fatal("Usage: go run cliente.go \"<nombre>\"")
+    }
+
+	nombreCliente := os.Args[1]
+
 	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -38,8 +46,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	clientID := rand.Intn(1000)
-	log.Printf("Client %d started", clientID)
+	log.Printf("Hola el meu nom es: %s", nombreCliente)
 
 	random := rand.New(rand.NewSource(time.Now().Unix()))
 	numOperations := random.Intn(10) + 1 // Genera un número aleatorio de operaciones entre 1 y 10
@@ -47,28 +54,52 @@ func main() {
 	// Balance inicializado en cero
 	balance := 0
 
+	log.Printf("%s vol fer %d operacions", nombreCliente, numOperations)
+
 	for i := 0; i < numOperations; i++ {
 		// Genera un número aleatorio para decidir entre ingreso o reintegro
 		isDeposit := random.Intn(2) == 0
 		amount := random.Intn(100) + 1 // Monto aleatorio entre 1 y 100
+		posible := 0
 
 		operation := "reintegro"
 		if isDeposit {
 			operation = "ingreso"
 			balance += amount
+			posible = 1
 		} else {
 			// Verificar si hay suficientes fondos antes de realizar el reintegro
 			if amount <= balance {
 				balance -= amount
+				posible = 1
 			} else {
-				log.Printf("OPERACIÓN NO PERMITIDA, NO HAY SUFICIENTES FONDOS")
+				posible = 0
 			}
 		}
 
-		log.Printf("Client %d - Operación %d: %s de %d", clientID, i+1, operation, amount)
-		log.Printf("Balance actual: %d", balance)
+		if !isDeposit {
+			amount = -amount
+		}
 
-		body := fmt.Sprintf("%d|%t|%d", clientID, isDeposit, amount)
+		//log.Printf("Client %s - Operación %d: %s de %d", nombreCliente, i+1, operation, amount)
+		log.Printf("%s operació %d: %d", nombreCliente, i+1, amount)
+		log.Printf("Operació sol·licitada")
+		//Hacemos una espera de 1seg para simular el tiempo de la operación
+		time.Sleep(1000 * time.Millisecond)
+
+		if posible == 0 { //caso de reintegro sin saldo
+			log.Printf("NO HI HA SALDO")
+		} else if posible == 1 && operation == "reintegro" { //caso de reintegro con saldo
+			log.Printf("ES FARÀ EL REINTEGRO SI ÉS POSSIBLE")
+		}else if posible == 1 && operation == "ingreso" { //caso de ingreso
+			log.Printf("INGRÉS CORRECTE")
+		}
+
+		log.Printf("Balanç actual: %d", balance)
+
+		log.Printf("%d----------------------------------------",i+1)
+
+		body := fmt.Sprintf("%s|%t|%d", nombreCliente, isDeposit, amount)
 		err = ch.PublishWithContext(ctx,
 			"",     // exchange
 			q.Name, // routing key
@@ -84,5 +115,5 @@ func main() {
 		time.Sleep(1000 * time.Millisecond) // Simula cierto tiempo entre operaciones
 	}
 
-	log.Printf("Client %d - Operaciones completadas", clientID)
+	log.Printf("Client %s - Operaciones completadas", nombreCliente)
 }

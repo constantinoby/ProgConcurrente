@@ -67,11 +67,11 @@ func main() {
 	go func() {
 		for d := range msgs {
 			operationInfo := string(d.Body)
-			clientID, isDeposit, amount := parseOperationInfo(operationInfo)
+			nombreCliente, isDeposit, amount := parseOperationInfo(operationInfo)
 
 			if isDeposit {
 				log.Println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-				log.Println("Operació rebuda: +", amount, "€"+" del Client: ", clientID)
+				log.Println("Operació rebuda: +", amount, "€"+" del Client: ", nombreCliente)
 				tresorer.Balance += amount
 				log.Println("Balanç actual:", tresorer.Balance)
 				//if tresorer.Balance >= botiMinim {
@@ -81,7 +81,7 @@ func main() {
 				log.Println("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 			} else {
 				log.Println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-				log.Println("Operació rebuda: -", amount, "€"+" del Client: ", clientID)
+				log.Println("Operació rebuda: -", amount, "€"+" del Client: ", nombreCliente)
 				// Verificar si hay suficientes fondos antes de realizar el reintegro
 				if amount <= tresorer.Balance {
 					tresorer.Balance -= amount
@@ -111,7 +111,7 @@ func main() {
 }
 
 // Función para parsear la información de la operación
-func parseOperationInfo(operationInfo string) (clientID int, isDeposit bool, amount int) {
-	fmt.Sscanf(operationInfo, "%d|%t|%d", &clientID, &isDeposit, &amount)
+func parseOperationInfo(operationInfo string) (nombreCliente string, isDeposit bool, amount int) {
+	fmt.Sscanf(operationInfo, "%s|%t|%d", &nombreCliente, &isDeposit, &amount)
 	return
 }
