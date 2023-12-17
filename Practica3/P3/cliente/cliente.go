@@ -42,8 +42,6 @@ func main() {
 		nil,          // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-	string trolleada;
-	trolleada := "juanjo"
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -100,7 +98,7 @@ func main() {
 
 		log.Printf("%d----------------------------------------",i+1)
 
-		body := fmt.Sprintf("%s|%t|%d", nombreCliente, isDeposit, amount)
+		body := fmt.Sprintf("%s %t %d", nombreCliente, isDeposit, amount)
 		err = ch.PublishWithContext(ctx,
 			"",     // exchange
 			q.Name, // routing key

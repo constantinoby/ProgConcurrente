@@ -62,11 +62,16 @@ func main() {
 	//random := rand.New(rand.NewSource(time.Now().Unix()))
 	//botiMinim := random.Intn(10) + 1                             // Genera un número aleatorio de operaciones entre 1 y 10
 	log.Println("El tresorer és al despatx. El botí mínim és: ") //+ fmt.Sprint(botiMinim) + "€")
+	currentTime := time.Now()
+	formattedDataTime := currentTime.Format("2006-01-02 15:04:05")
 
+	fmt.Println(formattedDataTime + "   [*] Esperant clients")
 	// Procesar operaciones de la cola
 	go func() {
 		for d := range msgs {
 			operationInfo := string(d.Body)
+			//log.Printf("Mensaje recibido en el tesorero: %s", operationInfo)
+
 			nombreCliente, isDeposit, amount := parseOperationInfo(operationInfo)
 
 			if isDeposit {
@@ -112,6 +117,28 @@ func main() {
 
 // Función para parsear la información de la operación
 func parseOperationInfo(operationInfo string) (nombreCliente string, isDeposit bool, amount int) {
-	fmt.Sscanf(operationInfo, "%s|%t|%d", &nombreCliente, &isDeposit, &amount)
+	fmt.Sscanf(operationInfo, "%s %t %d", &nombreCliente, &isDeposit, &amount)
+	/* fmt.Println("Nombre cliente:", nombreCliente)
+	fmt.Println("Is deposit:", isDeposit)
+	fmt.Println("Amount:", amount) */
+
+	if isDeposit == false {
+		amount = -amount
+	}
+
 	return
 }
+/*
+func parseOperationInfo(operationInfo string) (nombreCliente string, isDeposit bool, amount int) {
+	var isDepositInt int
+	_, err := fmt.Sscanf(operationInfo, "%s %s|%d|%d", &nombreCliente, &isDepositInt, &amount)
+	if err != nil {
+		// Manejar el error, por ejemplo, imprimir un mensaje de error o devolver un valor predeterminado.
+		log.Printf("Error al analizar el string: %s", err)
+		return
+	}
+
+	isDeposit = isDepositInt != 0
+	return
+}
+*/
