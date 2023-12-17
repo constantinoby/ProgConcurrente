@@ -60,7 +60,7 @@ func main() {
 	for i := 0; i < numOperations; i++ {
 		// Genera un número aleatorio para decidir entre ingreso o reintegro
 		isDeposit := random.Intn(2) == 0
-		amount := random.Intn(100) + 1 // Monto aleatorio entre 1 y 100
+		amount := random.Intn(10) + 1 // Monto aleatorio entre 1 y 100
 		posible := 0
 
 		operation := "reintegro"
@@ -115,6 +115,4 @@ func main() {
 
 		time.Sleep(1000 * time.Millisecond) // Simula cierto tiempo entre operaciones
 	}
-
-	log.Printf("Client %s - Operaciones completadas", nombreCliente)
 }
