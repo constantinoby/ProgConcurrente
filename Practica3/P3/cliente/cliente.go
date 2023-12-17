@@ -42,7 +42,8 @@ func main() {
 		nil,          // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-
+	string trolleada;
+	trolleada := "juanjo"
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -51,7 +52,7 @@ func main() {
 	random := rand.New(rand.NewSource(time.Now().Unix()))
 	numOperations := random.Intn(10) + 1 // Genera un número aleatorio de operaciones entre 1 y 10
 
-	// Balance inicializado en cero
+	// Balance inicializado en cero Prueba
 	balance := 0
 
 	log.Printf("%s vol fer %d operacions", nombreCliente, numOperations)
